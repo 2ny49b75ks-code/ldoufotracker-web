@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LDO — Détecteur d'OVNI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0b0217;
+    --nebula:#3B0A5E;
+    --nebula-light:#5B1A8C;
+    --nebula-glow: rgba(91,26,140,0.45);
+    --signal:#39FF14;
+    --signal-dim: rgba(57,255,20,0.35);
+    --starlight:#FFF6C9;
+    --fog:#C7CBDB;
+    --fog-dim: rgba(199,203,219,0.6);
+    --paper:#F3EEFF;
+    --danger:#FF6B57;
+    --display: 'Space Mono', monospace;
+    --body: 'Manrope', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--paper);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--display);
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--signal);
+  }
+  h1,h2,h3{font-family:var(--display); font-weight:700; letter-spacing:-0.01em;}
+  ::selection{background:var(--signal); color:var(--void);}
+
+  /* ---------- Starfield background ---------- */
+  #stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 80% 10%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 60% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 85%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 60%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 45% 35%, #fff, transparent),
+      radial-gradient(1px 1px at 15% 55%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 90%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 25% 5%, #fff, transparent),
+      radial-gradient(1px 1px at 95% 35%, #fff, transparent);
+    background-repeat:repeat;
+    background-size:600px 600px;
+    opacity:0.5;
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(11,2,23,0.7);
+    border-bottom:1px solid rgba(199,203,219,0.12);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:18px;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:50%;
+    border:2px solid var(--signal);
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px; color:var(--signal); background:var(--void);
+    box-shadow:0 0 12px var(--signal-dim);
+  }
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--fog-dim);}
+  .navlinks a:hover{color:var(--signal);}
+  .navlinks{display:none;}
+  @media(min-width:760px){.navlinks{display:flex;}}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--display); font-size:13px; letter-spacing:0.04em;
+    padding:14px 22px; border-radius:10px; text-decoration:none;
+    border:1px solid transparent; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{
+    background:var(--signal); color:var(--void); font-weight:700;
+    box-shadow:0 0 0 rgba(57,255,20,0.5);
+  }
+  .btn-primary:hover{box-shadow:0 6px 24px var(--signal-dim);}
+  .btn-ghost{
+    border-color:rgba(199,203,219,0.35); color:var(--paper);
+  }
+  .btn-ghost:hover{border-color:var(--signal); color:var(--signal);}
+  .btn-price{font-family:var(--display); color:var(--starlight); font-size:13px;}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    position:relative; z-index:1;
+    padding:96px 0 80px;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, var(--nebula-glow), transparent 60%),
+      linear-gradient(180deg, var(--void), #12042a 60%, var(--void));
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1fr; gap:56px; align-items:center;
+  }
+  @media(min-width:920px){.hero-grid{grid-template-columns:1.05fr 0.95fr;}}
+
+  .hero h1{
+    font-size:clamp(34px, 5.4vw, 58px);
+    line-height:1.05;
+    margin:18px 0 20px;
+  }
+  .hero h1 span{color:var(--signal);}
+  .hero p.lede{
+    font-size:17px; color:var(--fog); max-width:46ch; margin-bottom:32px;
+  }
+  .hero-ctas{display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:18px;}
+  .hero-note{font-size:12.5px; color:var(--fog-dim); font-family:var(--display);}
+
+  /* ---------- Scanner HUD (signature element) ---------- */
+  .hud{
+    position:relative;
+    border:1px solid rgba(57,255,20,0.35);
+    border-radius:16px;
+    background:linear-gradient(180deg, rgba(59,10,94,0.55), rgba(11,2,23,0.85));
+    padding:20px;
+    box-shadow:0 0 60px rgba(91,26,140,0.35), inset 0 0 40px rgba(57,255,20,0.04);
+  }
+  .hud-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:var(--display); font-size:11px; color:var(--fog-dim); letter-spacing:.08em;}
+  .hud-dot{width:7px; height:7px; border-radius:50%; background:var(--signal); display:inline-block; margin-right:6px; box-shadow:0 0 8px var(--signal); animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
+
+  .radar{
+    position:relative; width:100%; aspect-ratio:1/1; max-width:320px; margin:0 auto 16px;
+    border-radius:50%;
+    background:
+      repeating-radial-gradient(circle, rgba(57,255,20,0.12) 0 1px, transparent 1px 20%),
+      radial-gradient(circle, rgba(91,26,140,0.5), rgba(11,2,23,0.9) 70%);
+    border:1px solid rgba(57,255,20,0.25);
+    overflow:hidden;
+  }
+  .radar::before{
+    content:""; position:absolute; inset:0;
+    background:conic-gradient(from 0deg, rgba(57,255,20,0.55), transparent 28%);
+    animation:sweep 3.4s linear infinite;
+    mix-blend-mode:screen;
+  }
+  @keyframes sweep{ to { transform:rotate(360deg);} }
+  .target{
+    position:absolute; width:10px; height:10px; border-radius:50%;
+    background:var(--starlight); box-shadow:0 0 14px var(--starlight);
+    top:32%; left:64%;
+    animation:drift 3.4s ease-in-out infinite;
+  }
+  @keyframes drift{
+    0%,100%{ top:32%; left:64%; }
+    50%{ top:44%; left:38%; }
+  }
+  .reticle{
+    position:absolute; width:34px; height:34px; border:1.5px solid var(--signal);
+    border-radius:50%; top:32%; left:64%; transform:translate(-12px,-12px);
+    animation:drift 3.4s ease-in-out infinite;
+    opacity:.85;
+  }
+  .reticle::before,.reticle::after{content:""; position:absolute; background:var(--signal);}
+  .reticle::before{width:1px; height:8px; left:50%; top:-8px;}
+  .reticle::after{width:8px; height:1px; top:50%; left:-8px;}
+
+  .readout{font-family:var(--display); font-size:12.5px; color:var(--fog); display:grid; gap:7px;}
+  .readout .row{display:flex; justify-content:space-between; border-bottom:1px dashed rgba(199,203,219,0.15); padding-bottom:6px;}
+  .readout .row b{color:var(--paper); font-weight:400;}
+  .readout .verdict{color:var(--signal); font-weight:700;}
+  .caret{display:inline-block; width:7px; height:14px; background:var(--signal); margin-left:2px; animation:blink 1s step-end infinite; vertical-align:middle;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- Sections shared ---------- */
+  section{position:relative; z-index:1; padding:88px 0;}
+  .section-head{max-width:640px; margin-bottom:52px;}
+  .section-head h2{font-size:clamp(26px,3.4vw,36px); margin-top:14px;}
+  .section-head p{color:var(--fog); margin-top:14px; font-size:16px;}
+
+  /* ---------- Process ---------- */
+  .process{border-top:1px solid rgba(199,203,219,0.12);}
+  .steps{display:grid; gap:0; border-top:1px solid rgba(199,203,219,0.14);}
+  .step{
+    display:grid; grid-template-columns:64px 1fr; gap:22px;
+    padding:28px 0; border-bottom:1px solid rgba(199,203,219,0.14);
+    align-items:start;
+  }
+  .step .num{font-family:var(--display); color:var(--signal); font-size:14px; padding-top:2px;}
+  .step h3{font-size:19px; margin-bottom:8px;}
+  .step p{color:var(--fog); font-size:15px; max-width:60ch;}
+
+  /* ---------- Features grid ---------- */
+  .features{background:linear-gradient(180deg, transparent, rgba(59,10,94,0.18), transparent);}
+  .fgrid{display:grid; grid-template-columns:1fr; gap:1px; background:rgba(199,203,219,0.14); border:1px solid rgba(199,203,219,0.14); border-radius:14px; overflow:hidden;}
+  @media(min-width:640px){.fgrid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:980px){.fgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .fcard{background:#0e0420; padding:26px; min-height:150px;}
+  .fcard .tag{font-family:var(--display); font-size:11px; color:var(--signal); letter-spacing:.08em;}
+  .fcard h3{font-size:17px; margin:10px 0 8px;}
+  .fcard p{font-size:14px; color:var(--fog-dim);}
+  .fcard .formula{
+    display:block; margin-top:12px; padding:8px 10px;
+    font-family:var(--display); font-size:12px; color:var(--signal);
+    background:rgba(57,255,20,0.06); border:1px solid rgba(57,255,20,0.22); border-radius:8px;
+  }
+
+  /* ---------- Tutorial ---------- */
+  .tutorial{border-top:1px solid rgba(199,203,219,0.12);}
+  .tutorial-grid{display:grid; gap:56px;}
+  @media(min-width:920px){.tutorial-grid{grid-template-columns:1fr 1fr;}}
+  .tutorial h3.sub{font-size:15px; font-family:var(--display); color:var(--starlight); margin-bottom:18px; letter-spacing:.04em;}
+  .usage{display:grid; gap:0; border-top:1px solid rgba(199,203,219,0.14);}
+  .usage .step{grid-template-columns:44px 1fr; padding:20px 0;}
+  .usage .step .num{font-size:12px;}
+  .usage .step h4{font-size:15.5px; margin-bottom:4px; font-family:var(--body); font-weight:700;}
+  .usage .step p{font-size:14px; color:var(--fog-dim); max-width:none;}
+  .mode-pair{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;}
+  .mode-pill{
+    border:1px solid rgba(199,203,219,0.2); border-radius:9px; padding:10px 12px; font-size:13px;
+  }
+  .mode-pill b{display:block; font-family:var(--display); font-size:11px; color:var(--signal); margin-bottom:3px; letter-spacing:.06em;}
+
+  /* ---------- Honesty band ---------- */
+  .honesty{
+    border:1px solid rgba(57,255,20,0.3);
+    border-radius:16px;
+    padding:36px;
+    background:linear-gradient(135deg, rgba(59,10,94,0.4), rgba(11,2,23,0.6));
+    display:grid; gap:24px;
+  }
+  @media(min-width:820px){.honesty{grid-template-columns:1fr 1fr;}}
+  .honesty h2{font-size:24px; margin-bottom:10px;}
+  .honesty p{color:var(--fog); font-size:15px;}
+  .honesty ul{margin-top:14px; display:grid; gap:10px; font-size:14px; color:var(--fog);}
+  .honesty li{display:flex; gap:10px;}
+  .honesty li::before{content:"—"; color:var(--signal); flex:none;}
+
+  /* ---------- Pricing / CTA ---------- */
+  .cta{
+    text-align:center;
+    background:radial-gradient(ellipse 700px 400px at 50% 30%, var(--nebula-glow), transparent 70%);
+    border-top:1px solid rgba(199,203,219,0.12);
+  }
+  .price-tag{
+    display:inline-flex; align-items:baseline; gap:8px; font-family:var(--display);
+    color:var(--starlight); font-size:15px; margin-bottom:22px;
+  }
+  .price-tag b{font-size:34px; color:var(--paper);}
+  .cta h2{font-size:clamp(28px,4vw,42px); max-width:20ch; margin:0 auto 18px;}
+  .cta p{color:var(--fog); max-width:52ch; margin:0 auto 34px; font-size:16px;}
+  .store-badge{
+    display:inline-flex; align-items:center; gap:12px;
+    background:#000; border:1px solid rgba(255,255,255,0.25); border-radius:12px;
+    padding:12px 22px; text-decoration:none; color:#fff;
+  }
+  .store-badge svg{width:26px; height:26px;}
+  .store-badge .lines{text-align:left; line-height:1.2;}
+  .store-badge .lines small{display:block; font-size:11px; color:#c9c9c9;}
+  .store-badge .lines strong{font-family:var(--body); font-size:17px;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:44px 0; border-top:1px solid rgba(199,203,219,0.12); font-size:13px; color:var(--fog-dim);}
+  footer .wrap{display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; align-items:center;}
+  footer a:hover{color:var(--signal);}
+  .footlinks{display:flex; gap:20px; flex-wrap:wrap;}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:none;}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark">L</span> LDO</div>
+    <div class="navlinks">
+      <a href="#comment">Comment ça marche</a>
+      <a href="#analyse">L'analyse</a>
+      <a href="#tutoriel">Tutoriel</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="#honnetete">Notre approche</a>
+      <a href="#" class="support-link">Assistance</a>
+      <a href="#obtenir">Télécharger</a>
+    </div>
+    <a href="#obtenir" class="btn btn-primary store-link" style="padding:10px 18px;">0,99 $ CA</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">// Application iOS · Vision + ARKit</div>
+      <h1>Vous venez de voir<br>quelque chose. <span>LDO analyse.</span></h1>
+      <p class="lede">Filmez l'objet, LDO combine la caméra et le suivi de mouvement ARKit de votre iPhone pour calculer sa trajectoire, sa vitesse, ses forces G, son illumination et sa position — puis vous dit, chiffres à l'appui, ce qu'il est probablement.</p>
+      <div class="hero-ctas">
+        <a href="#obtenir" class="btn btn-primary store-link">Obtenir LDO — 0,99 $ CA</a>
+        <a href="#comment" class="btn btn-ghost">Voir comment ça marche</a>
+      </div>
+      <div class="hero-note">Compatible avec tout iPhone récent — aucun LiDAR requis</div>
+    </div>
+
+    <div class="hud reveal">
+      <div class="hud-top"><span><span class="hud-dot"></span>ANALYSE EN COURS · MODE NUIT</span><span>00:04.2</span></div>
+      <div class="radar"><div class="reticle"></div><div class="target"></div></div>
+      <div class="readout">
+        <div class="row"><span>Forme</span><b>Non identifiée (18%)</b></div>
+        <div class="row"><span>Trajectoire</span><b>Zigzag · R² 0.41</b></div>
+        <div class="row"><span>Vitesse max.</span><b>≈ 4 100 km/h</b></div>
+        <div class="row"><span>Illumination</span><b>Scintillante</b></div>
+        <div class="row"><span>Verdict</span><b class="verdict">67% OVNI possible<span class="caret"></span></b></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="process" id="comment">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Le processus</div>
+      <h2>Une vidéo. Neuf calculs. Une réponse.</h2>
+      <p>Chaque signalement suit la même chaîne d'analyse, du choix du mode jusqu'au verdict final.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">01</div><div><h3>Choisissez Nuit ou Jour</h3><p>Ciel sombre avec un point lumineux, ou ciel clair avec une silhouette à contre-jour ? LDO n'utilise pas la même détection dans les deux cas — vous le lui indiquez avant de filmer.</p></div></div>
+      <div class="step reveal"><div class="num">02</div><div><h3>Filmez d'une pression</h3><p>Un seul bouton lance l'enregistrement HD à pleine résolution — aucun réglage à faire pendant que l'objet est encore dans le ciel.</p></div></div>
+      <div class="step reveal"><div class="num">03</div><div><h3>Choisissez les 2 meilleures secondes</h3><p>Après coup, sélectionnez l'extrait de 2 secondes à analyser — la vidéo complète reste intacte pour la revoir en entier.</p></div></div>
+      <div class="step reveal"><div class="num">04</div><div><h3>LDO isole et suit l'objet</h3><p>Mode Nuit : seuil de luminosité qui s'ajuste image par image pour isoler le point le plus lumineux. Mode Jour : détection de la silhouette la plus sombre sur le ciel. Un suivi continu distingue l'objet réel du bruit ou d'un tremblement de main.</p></div></div>
+      <div class="step reveal"><div class="num">05</div><div><h3>Trajectoire corrigée du mouvement de caméra</h3><p>La position à l'écran est convertie en direction réelle dans le ciel grâce à la pose du téléphone (ARKit), pour calculer une vraie trajectoire — pas juste un déplacement de pixels.</p></div></div>
+      <div class="step reveal"><div class="num">06</div><div><h3>Un verdict, avec ses raisons</h3><p>LDO affiche un pourcentage — toujours plafonné à 90 %, jamais une certitude absolue — et surtout la liste des facteurs qui y mènent, pour que vous puissiez juger par vous-même.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="analyse">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Sous le capot</div>
+      <h2>Sept mesures, un seul enregistrement</h2>
+      <p>Chaque vidéo capturée alimente toutes les analyses ci-dessous en même temps.</p>
+    </div>
+    <div class="fgrid">
+      <div class="fcard"><div class="tag">TRAJECTOIRE</div><h3>Ligne droite, courbe... ou zigzag ?</h3><p>Détection des changements de direction, des forces G en jeu comparées à la tolérance humaine, et des trajectoires en zigzag gauche-droite qu'aucun aéronef connu n'exécute.</p></div>
+      <div class="fcard"><div class="tag">VITESSE</div><h3>Comparée aux appareils les plus rapides connus</h3><p>Vitesse moyenne et maximale ; une vitesse 2 à 3 fois supérieure à celle d'un F-35 (~1 960 km/h) est signalée comme hors de portée de l'aviation connue.</p></div>
+      <div class="fcard"><div class="tag">ILLUMINATION</div><h3>Scintillante ou continue ?</h3><p>Un scintillement variable est atypique d'une source connue ; une lumière continue et stable évoque plutôt un projecteur ou un feu de navigation.</p></div>
+      <div class="fcard"><div class="tag">SON</div><h3>Écoute de la bande audio</h3><p>Reconnaissance des signatures sonores d'avion, d'hélicoptère, d'oiseau ou d'insecte.</p></div>
+      <div class="fcard"><div class="tag">DISTANCE</div><h3>Triangulation angulaire</h3><p>Aucun LiDAR (portée trop courte pour un objet aérien lointain) : distance et altitude sont estimées par triangulation, toujours avec un indice de confiance affiché.</p></div>
+      <div class="fcard"><div class="tag">POSITION</div><h3>Carte et coordonnées GPS</h3><p>La position de votre iPhone au moment de la capture est affichée sur une carte, avec latitude et longitude, pour situer l'observation.</p></div>
+      <div class="fcard"><div class="tag">ARCHIVES</div><h3>Vidéo et 3 photos</h3><p>Plan large, zoom automatique maximum rehaussé pour bien voir la cible, et zoom fixe ×2 — sauvegardés avec la vidéo sur l'appareil et iCloud.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="tutorial" id="tutoriel">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Tutoriel</div>
+      <h2>Comment fonctionne LDO, en détail</h2>
+      <p>Le mode d'emploi complet et les calculs derrière chaque chiffre affiché à l'écran.</p>
+    </div>
+    <div class="tutorial-grid">
+      <div>
+        <h3 class="sub">UTILISER L'APP</h3>
+        <div class="usage">
+          <div class="step reveal">
+            <div class="num">1</div>
+            <div>
+              <h4>Sélectionnez le mode</h4>
+              <p>Sur l'écran de capture, choisissez Nuit ou Jour selon la scène.</p>
+              <div class="mode-pair">
+                <div class="mode-pill"><b>NUIT</b>Point lumineux sur ciel sombre.</div>
+                <div class="mode-pill"><b>JOUR</b>Silhouette sombre sur ciel clair.</div>
+              </div>
+            </div>
+          </div>
+          <div class="step reveal"><div class="num">2</div><div><h4>Filmez</h4><p>Un bouton démarre l'enregistrement HD. La vidéo complète est automatiquement sauvegardée dans Photos et dans « Mes enregistrements », sans lancer d'analyse.</p></div></div>
+          <div class="step reveal"><div class="num">3</div><div><h4>Choisissez une vidéo à analyser</h4><p>Depuis « Mes enregistrements » (capture LIVE, avec la pose de la caméra) ou depuis l'onglet Bibliothèque (importée depuis Photos).</p></div></div>
+          <div class="step reveal"><div class="num">4</div><div><h4>Recadrez à 2 secondes</h4><p>Déplacez la fenêtre de découpe sur le passage le plus net — seul cet extrait est échantillonné pour l'analyse.</p></div></div>
+          <div class="step reveal"><div class="num">5</div><div><h4>Laissez le calcul se faire</h4><p>Un radar animé et une barre de progression réelle (par étape terminée, pas une estimation) accompagnent les neuf calculs, entièrement sur l'appareil.</p></div></div>
+          <div class="step reveal"><div class="num">6</div><div><h4>Consultez les résultats</h4><p>3 photos recadrées, une carte du lieu de capture, toutes les mesures et le verdict avec ses facteurs. « Nouvelle capture » remet l'app à zéro pour la prochaine observation.</p></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="sub">LES CALCULS EXPLIQUÉS</h3>
+        <div class="fgrid" style="grid-template-columns:1fr;">
+          <div class="fcard">
+            <div class="tag">DÉTECTION</div>
+            <h3>Isoler l'objet dans l'image</h3>
+            <p>Nuit : seuil de luminosité recalculé à chaque image, à mi-chemin entre le fond du ciel et le point le plus clair — capte un point seulement modérément brillant, pas juste les sources aveuglantes. Jour : même principe inversé, sur la silhouette la plus sombre du ciel.</p>
+            <span class="formula">seuil = moyenne + 0,5 × (max − moyenne)</span>
+          </div>
+          <div class="fcard">
+            <div class="tag">TRAJECTOIRE</div>
+            <h3>Direction réelle, pas des pixels</h3>
+            <p>Chaque position à l'écran est convertie en direction 3D réelle dans le ciel à partir de la pose de la caméra (ARKit) au moment exact de la détection — un mouvement de votre bras ne compte pas comme un mouvement de l'objet.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">DISTANCE & ALTITUDE</div>
+            <h3>Triangulation angulaire</h3>
+            <p>À partir d'une taille réelle plausible selon la forme détectée et de l'angle qu'elle occupe dans l'image. Toujours accompagnée d'un indice de confiance — jamais présentée comme une mesure certaine.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">VITESSE & FORCES G</div>
+            <h3>Distance × vitesse angulaire</h3>
+            <p>Sans distance fiable, LDO affiche « non calculable » plutôt qu'un chiffre inventé. La vitesse maximale est comparée aux appareils connus, jusqu'au F-35 (~1 960 km/h).</p>
+            <span class="formula">v (km/h) = distance (m) × vitesse angulaire (rad/s) × 3,6</span>
+          </div>
+          <div class="fcard">
+            <div class="tag">ILLUMINATION</div>
+            <h3>Couleur et régularité</h3>
+            <p>Température de couleur approximée depuis la teinte moyenne de la zone lumineuse (blanc-bleuté ≈ LED, orangé ≈ reflet solaire), et détection d'un scintillement variable contre une intensité continue.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">VERDICT</div>
+            <h3>Somme de facteurs transparents</h3>
+            <p>Forme non identifiée, forces G ou accélération hors norme, trajectoire irrégulière ou en zigzag, vitesse extrême, scintillement, absence de son identifié : chaque facteur présent est listé à l'écran. Le pourcentage final est toujours plafonné à 90 % — jamais une certitude.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="honnetete">
+  <div class="wrap">
+    <div class="honesty reveal">
+      <div>
+        <div class="eyebrow">// Notre approche</div>
+        <h2>LDO n'invente jamais un chiffre</h2>
+        <p>Personne ne peut mesurer avec certitude la distance d'un objet aérien lointain sans instrument dédié — alors LDO ne prétend pas le contraire : chaque distance est une estimation par triangulation angulaire, jamais une mesure directe.</p>
+      </div>
+      <ul>
+        <li>Sans distance fiable, la vitesse et les forces G s'affichent comme « non calculables », jamais comme un chiffre inventé.</li>
+        <li>Chaque estimation est accompagnée de son indice de confiance, visible dans l'application.</li>
+        <li>Le verdict final est toujours plafonné à 90 % de possibilité — jamais 100 %, même sur une observation évidente : LDO reste une aide à l'interprétation, pas une certification scientifique.</li>
+        <li>Aucune vidéo ni photo ne quitte votre appareil vers nos serveurs — l'analyse est entièrement locale, sur l'iPhone.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="obtenir">
+  <div class="wrap">
+    <div class="price-tag"><b>0,99 $</b> CA · App Store</div>
+    <h2>Le prochain point lumineux mérite une vraie analyse.</h2>
+    <p>Téléchargez LDO et gardez un œil (assisté) sur le ciel.</p>
+    <a class="store-badge store-link" href="#">
+      <svg viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141 8 184.8 8 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 37.5 59 129.3 107.2 127.8 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-84.1 102.6-121.7-65.2-30.7-65.7-90-65.7-92.1zM251.1 88.7c26.9-32 24.5-61.2 23.7-71.7-23.8 1.4-51.4 16.4-67.1 34.9-17.3 19.8-27.5 44.3-25.3 70.5 25.2 2 48.2-10.6 68.7-33.7z"/></svg>
+      <span class="lines"><small>Disponible sur l'</small><strong>App Store</strong></span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:14px;"><span class="brand-mark" style="width:22px;height:22px;font-size:8px;">L</span> LDO — Détecteur d'OVNI</div>
+    <div class="footlinks">
+      <a href="#" class="privacy-link">Politique de confidentialité</a>
+      <a href="#" class="support-link">Assistance</a>
+      <a href="#tutoriel">Tutoriel</a>
+      <a href="boutique.html">Boutique</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ⚠️ À COMPLÉTER : collez ici l'URL de votre fiche App Store dès qu'elle existe
+  // (format habituel : https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
+  const APP_STORE_URL = ""; // ex: "https://apps.apple.com/ca/app/ldo/id0000000000"
+
+  // ⚠️ À COMPLÉTER : collez ici l'URL de votre page d'assistance Carrd une fois publiée
+  const SUPPORT_URL = ""; // ex: "https://ldo.carrd.co"
+
+  // ⚠️ À COMPLÉTER : collez ici l'URL de votre politique de confidentialité une fois hébergée
+  const PRIVACY_URL = ""; // ex: "https://ldo.carrd.co/#confidentialite"
+
+  document.querySelectorAll('.store-link').forEach(link => {
+    if (APP_STORE_URL) {
+      link.href = APP_STORE_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    }
+    // Tant que l'URL n'est pas renseignée, les boutons pointent vers la section
+    // #obtenir (comportement actuel), pour ne jamais afficher de lien mort.
+  });
+
+  document.querySelectorAll('.support-link').forEach(link => {
+    if (SUPPORT_URL) {
+      link.href = SUPPORT_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    } else {
+      // Tant que la page d'assistance n'est pas hébergée, le bouton ouvre
+      // directement un courriel — jamais de lien mort.
+      link.href = "mailto:j_david@live.ca?subject=Assistance%20LDO";
+    }
+  });
+
+  document.querySelectorAll('.privacy-link').forEach(link => {
+    if (PRIVACY_URL) {
+      link.href = PRIVACY_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    } else {
+      link.href = "mailto:j_david@live.ca?subject=Politique%20de%20confidentialit%C3%A9%20LDO";
+    }
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

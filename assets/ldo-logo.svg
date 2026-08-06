@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#3B0A5E"/>
+
+  <!-- Quadrant 1 : Soucoupe volante à 45 degrés -->
+  <g transform="translate(0,0)">
+    <rect x="0" y="0" width="256" height="256" fill="#4A1170" stroke="#2a0640" stroke-width="2"/>
+    <g transform="translate(128,128) rotate(-45)">
+      <ellipse cx="0" cy="0" rx="70" ry="20" fill="#8a8fa3"/>
+      <ellipse cx="0" cy="-14" rx="30" ry="18" fill="#c7cbdb"/>
+      <ellipse cx="0" cy="6" rx="80" ry="8" fill="#4a4e63"/>
+    </g>
+  </g>
+
+  <!-- Quadrant 2 : Boule lumineuse -->
+  <g transform="translate(256,0)">
+    <rect x="0" y="0" width="256" height="256" fill="#4A1170" stroke="#2a0640" stroke-width="2"/>
+    <circle cx="128" cy="128" r="55" fill="#fff6c9"/>
+    <circle cx="128" cy="128" r="90" fill="#fff6c9" opacity="0.25"/>
+    <circle cx="128" cy="128" r="120" fill="#fff6c9" opacity="0.1"/>
+  </g>
+
+  <!-- Quadrant 3 : Triangle noir -->
+  <g transform="translate(0,256)">
+    <rect x="0" y="0" width="256" height="256" fill="#4A1170" stroke="#2a0640" stroke-width="2"/>
+    <polygon points="128,80 200,190 56,190" fill="#08080d" stroke="#2a2a35" stroke-width="3"/>
+    <circle cx="128" cy="180" r="5" fill="#39ff14"/>
+    <circle cx="90" cy="180" r="4" fill="#39ff14" opacity="0.7"/>
+    <circle cx="166" cy="180" r="4" fill="#39ff14" opacity="0.7"/>
+  </g>
+
+  <!-- Quadrant 4 : Tic-tac blanche -->
+  <g transform="translate(256,256)">
+    <rect x="0" y="0" width="256" height="256" fill="#4A1170" stroke="#2a0640" stroke-width="2"/>
+    <g transform="translate(128,128) rotate(20)">
+      <rect x="-70" y="-18" width="140" height="36" rx="18" ry="18" fill="#f2f2f2"/>
+    </g>
+  </g>
+
+  <!-- Cercle central + texte LDO en vert fluo -->
+  <circle cx="256" cy="256" r="58" fill="#3B0A5E" stroke="#39ff14" stroke-width="3"/>
+  <text x="256" y="270" font-family="Helvetica, Arial, sans-serif" font-size="42" font-weight="700"
+        fill="#39ff14" text-anchor="middle" style="text-shadow:0 0 8px #39ff14;">LDO</text>
+
+  <!-- Contour extérieur de l'icône en vert fluo -->
+  <rect x="6" y="6" width="500" height="500" rx="8" fill="none" stroke="#39ff14" stroke-width="12"/>
+</svg>

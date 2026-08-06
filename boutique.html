@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique LDO — Détecteur d'OVNI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0b0217;
+    --nebula:#3B0A5E;
+    --nebula-light:#5B1A8C;
+    --nebula-glow: rgba(91,26,140,0.45);
+    --signal:#39FF14;
+    --signal-dim: rgba(57,255,20,0.35);
+    --starlight:#FFF6C9;
+    --fog:#C7CBDB;
+    --fog-dim: rgba(199,203,219,0.6);
+    --paper:#F3EEFF;
+    --danger:#FF6B57;
+    --violet-pale:#C9AEE8;
+    --violet-medium:#7C4FB0;
+    --violet-dark:#3B0A5E;
+    --display: 'Space Mono', monospace;
+    --body: 'Manrope', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--paper);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--display);
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--signal);
+  }
+  h1,h2,h3{font-family:var(--display); font-weight:700; letter-spacing:-0.01em;}
+  ::selection{background:var(--signal); color:var(--void);}
+
+  #stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 80% 10%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 60% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 85%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 60%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 45% 35%, #fff, transparent),
+      radial-gradient(1px 1px at 15% 55%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 90%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 25% 5%, #fff, transparent),
+      radial-gradient(1px 1px at 95% 35%, #fff, transparent);
+    background-repeat:repeat;
+    background-size:600px 600px;
+    opacity:0.5;
+  }
+
+  nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(11,2,23,0.7);
+    border-bottom:1px solid rgba(199,203,219,0.12);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:18px;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:50%;
+    border:2px solid var(--signal);
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px; color:var(--signal); background:var(--void);
+    box-shadow:0 0 12px var(--signal-dim);
+  }
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--fog-dim);}
+  .navlinks a:hover, .navlinks a.active{color:var(--signal);}
+  .navlinks{display:none;}
+  @media(min-width:760px){.navlinks{display:flex;}}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--display); font-size:13px; letter-spacing:0.04em;
+    padding:14px 22px; border-radius:10px; text-decoration:none;
+    border:1px solid transparent; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{
+    background:var(--signal); color:var(--void); font-weight:700;
+    box-shadow:0 0 0 rgba(57,255,20,0.5);
+  }
+  .btn-primary:hover{box-shadow:0 6px 24px var(--signal-dim);}
+  .btn-ghost{
+    border-color:rgba(199,203,219,0.35); color:var(--paper);
+  }
+  .btn-ghost:hover{border-color:var(--signal); color:var(--signal);}
+
+  header.hero{
+    position:relative; z-index:1;
+    padding:72px 0 56px;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, var(--nebula-glow), transparent 60%),
+      linear-gradient(180deg, var(--void), #12042a 60%, var(--void));
+    overflow:hidden;
+  }
+  .hero h1{font-size:clamp(32px, 5vw, 52px); line-height:1.05; margin:14px 0 18px;}
+  .hero h1 span{color:var(--signal);}
+  .hero p.lede{font-size:17px; color:var(--fog); max-width:56ch; margin-bottom:8px;}
+  .hero .note{font-size:12.5px; color:var(--fog-dim); font-family:var(--display); margin-top:18px;}
+
+  section{position:relative; z-index:1; padding:64px 0;}
+  .section-head{max-width:680px; margin-bottom:40px;}
+  .section-head h2{font-size:clamp(24px,3vw,32px); margin-top:12px;}
+  .section-head p{color:var(--fog); margin-top:12px; font-size:15.5px;}
+
+  /* ---------- How it works strip ---------- */
+  .howit{border-top:1px solid rgba(199,203,219,0.12); border-bottom:1px solid rgba(199,203,219,0.12);}
+  .howit-grid{display:grid; gap:24px;}
+  @media(min-width:760px){.howit-grid{grid-template-columns:repeat(3,1fr);}}
+  .howit-card{
+    border:1px solid rgba(199,203,219,0.14); border-radius:14px; padding:22px; background:#0e0420;
+  }
+  .howit-card .n{font-family:var(--display); color:var(--signal); font-size:12px; letter-spacing:.08em;}
+  .howit-card h3{font-size:16px; margin:10px 0 6px;}
+  .howit-card p{font-size:14px; color:var(--fog-dim);}
+
+  /* ---------- Product grid ---------- */
+  .pgrid{display:grid; gap:22px;}
+  @media(min-width:640px){.pgrid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:1020px){.pgrid{grid-template-columns:1fr 1fr 1fr 1fr;}}
+
+  .pcard{
+    border:1px solid rgba(199,203,219,0.16); border-radius:16px; overflow:hidden;
+    background:#0e0420; display:flex; flex-direction:column;
+  }
+  .mockup{
+    position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+    background:#E4E1EA;
+  }
+  .pcard .badge-soon{
+    position:absolute; top:10px; right:10px; font-family:var(--display); font-size:10px;
+    letter-spacing:.06em; color:var(--starlight); background:rgba(11,2,23,0.75);
+    border:1px solid rgba(255,246,201,0.35); border-radius:20px; padding:4px 10px;
+  }
+  .pcard .body{padding:18px; display:flex; flex-direction:column; gap:10px; flex:1;}
+  .pcard h3{font-size:16px;}
+  .pcard .desc{font-size:13px; color:var(--fog-dim);}
+  .swatches{display:flex; gap:7px; flex-wrap:wrap;}
+  .swatch{width:20px; height:20px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); display:inline-block;}
+  .sizes{display:flex; gap:6px; flex-wrap:wrap; font-family:var(--display); font-size:11px;}
+  .size-chip{border:1px solid rgba(199,203,219,0.3); border-radius:6px; padding:3px 7px; color:var(--fog);}
+  .pcard .notify{
+    margin-top:auto; font-family:var(--display); font-size:11.5px; color:var(--signal);
+    text-decoration:none; border-top:1px dashed rgba(199,203,219,0.18); padding-top:12px;
+  }
+  .pcard .notify:hover{text-decoration:underline;}
+
+  /* ---------- Garment silhouette (pure CSS) ---------- */
+  .garment{position:relative; width:64%; height:64%; filter:drop-shadow(0 10px 18px rgba(0,0,0,0.45));}
+  .garment-tee{
+    clip-path:polygon(30% 0%, 42% 0%, 50% 8%, 58% 0%, 70% 0%, 100% 20%, 84% 36%, 74% 28%, 74% 100%, 26% 100%, 26% 28%, 16% 36%, 0% 20%);
+  }
+  .garment-hoodie{
+    clip-path:polygon(35% 0%, 65% 0%, 65% 6%, 78% 4%, 100% 22%, 84% 38%, 74% 30%, 74% 100%, 26% 100%, 26% 30%, 16% 38%, 0% 22%, 22% 4%, 35% 6%);
+  }
+  .garment-crew{
+    clip-path:polygon(32% 0%, 68% 0%, 68% 8%, 100% 20%, 84% 36%, 74% 28%, 74% 100%, 26% 100%, 26% 28%, 16% 36%, 0% 20%, 32% 8%);
+  }
+  .garment-cap{
+    width:70%; height:52%; border-radius:50% 50% 6% 6% / 90% 90% 10% 10%;
+    position:relative;
+  }
+  .garment-cap::after{
+    content:""; position:absolute; left:50%; bottom:-8%; transform:translateX(-50%);
+    width:74%; height:16%; border-radius:0 0 40% 40%; background:inherit;
+  }
+  .garment-poster{width:52%; height:82%; border-radius:2px; box-shadow:0 12px 26px rgba(0,0,0,0.5);}
+  .garment-mug{width:46%; height:56%; border-radius:6px 6px 16px 16px; position:relative;}
+  .garment-mug::after{
+    content:""; position:absolute; right:-26%; top:22%; width:30%; height:44%;
+    border:7px solid; border-left:none; border-radius:0 40% 40% 0;
+  }
+
+  .g-white{background:#f3eeff; color:#3B0A5E;}
+  .g-black{background:#0c0810; color:#39FF14; border:1px solid rgba(255,255,255,0.08);}
+  .g-pale{background:var(--violet-pale); color:#2a0640;}
+  .g-medium{background:var(--violet-medium); color:#f3eeff;}
+  .g-dark{background:var(--violet-dark); color:#39FF14; border:1px solid rgba(255,255,255,0.06);}
+  .garment-mug::after{border-color:currentColor;}
+
+  .glogo{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-56%);
+    width:38%; aspect-ratio:1/1; border-radius:8px; overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4); border:1px solid rgba(0,0,0,0.15);
+  }
+  .glogo img{width:100%; height:100%; display:block; object-fit:cover;}
+  .gqr{
+    position:absolute; left:6%; bottom:8%; width:16%; aspect-ratio:1/1;
+    background:#fff; border-radius:3px; padding:2px; box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  }
+  .gqr img{width:100%; height:100%; display:block;}
+
+  /* ---------- Design types explainer ---------- */
+  .types{
+    display:grid; gap:20px; border:1px solid rgba(57,255,20,0.25); border-radius:16px; padding:28px;
+    background:linear-gradient(135deg, rgba(59,10,94,0.4), rgba(11,2,23,0.6));
+  }
+  @media(min-width:760px){.types{grid-template-columns:1fr 1fr;}}
+  .type-card{display:flex; gap:16px; align-items:flex-start;}
+  .type-card .mockup{width:120px; height:120px; flex:none; border-radius:12px;}
+  .type-card h4{font-family:var(--display); color:var(--starlight); font-size:13px; letter-spacing:.05em; margin-bottom:6px;}
+  .type-card p{font-size:14px; color:var(--fog);}
+
+  /* ---------- Model note ---------- */
+  .model-note{
+    border:1px solid rgba(199,203,219,0.16); border-radius:16px; padding:28px;
+    background:#0e0420; display:grid; gap:14px;
+  }
+  .model-note p{color:var(--fog); font-size:15px;}
+  .model-note .tag-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;}
+  .model-note .tag{
+    font-family:var(--display); font-size:11px; color:var(--signal);
+    border:1px solid rgba(57,255,20,0.3); border-radius:20px; padding:5px 12px;
+  }
+
+  footer{padding:44px 0; border-top:1px solid rgba(199,203,219,0.12); font-size:13px; color:var(--fog-dim);}
+  footer .wrap{display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; align-items:center;}
+  footer a:hover{color:var(--signal);}
+  .footlinks{display:flex; gap:20px; flex-wrap:wrap;}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:none;}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index-1.html"><span class="brand-mark">L</span> LDO</a>
+    <div class="navlinks">
+      <a href="index-1.html#comment">Comment ça marche</a>
+      <a href="index-1.html#tutoriel">Tutoriel</a>
+      <a href="boutique.html" class="active">Boutique</a>
+      <a href="index-1.html#honnetete">Notre approche</a>
+      <a href="index-1.html#obtenir">Télécharger</a>
+    </div>
+    <a href="index-1.html#obtenir" class="btn btn-primary" style="padding:10px 18px;">Obtenir l'app</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">// Boutique LDO · Impression à la demande</div>
+    <h1>Portez le signal. <span>Pas juste l'app.</span></h1>
+    <p class="lede">Vêtements et objets aux couleurs de LDO — Détecteur d'OVNI, avec le logo et un code QR vers l'app. Fabriqués et expédiés à la commande, un article à la fois, aucun stock à gérer.</p>
+    <div class="note">🚧 Boutique en préparation — aperçu des modèles ci-dessous, mise en vente à venir.</div>
+  </div>
+</header>
+
+<section class="howit">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Le modèle</div>
+      <h2>Impression à la demande, sans inventaire</h2>
+      <p>Chaque commande est fabriquée et expédiée directement par notre fournisseur d'impression — LDO n'a jamais de stock physique.</p>
+    </div>
+    <div class="howit-grid">
+      <div class="howit-card reveal"><div class="n">01</div><h3>Vous commandez</h3><p>Choisissez le produit, la couleur et la taille sur la boutique du site.</p></div>
+      <div class="howit-card reveal"><div class="n">02</div><h3>Fabriqué à l'unité</h3><p>L'article est imprimé et assemblé seulement après l'achat — pas avant, pas en lot.</p></div>
+      <div class="howit-card reveal"><div class="n">03</div><h3>Expédié directement chez vous</h3><p>Le fournisseur vous l'envoie directement ; LDO ne touche jamais l'article physique.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="vetements">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Vêtements</div>
+      <h2>T-shirt, capuchon, coton ouaté, casquette</h2>
+      <p>Logo LDO à l'avant, code QR vers le site en bas à gauche pour télécharger l'app directement. Disponible en 5 coloris, tailles S à XXL.</p>
+    </div>
+
+    <div class="pgrid">
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-tee g-black">
+            <div class="glogo"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+            <div class="gqr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=0&data=https://ldoufotracker.com" alt="Code QR LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>T-shirt LDO</h3>
+          <p class="desc">Coton, coupe unisexe. Logo pleine grandeur à l'avant.</p>
+          <div class="swatches">
+            <span class="swatch" style="background:#f3eeff" title="Blanc"></span>
+            <span class="swatch" style="background:#0c0810" title="Noir"></span>
+            <span class="swatch" style="background:#C9AEE8" title="Violet pâle"></span>
+            <span class="swatch" style="background:#7C4FB0" title="Violet médium"></span>
+            <span class="swatch" style="background:#3B0A5E" title="Violet foncé"></span>
+          </div>
+          <div class="sizes"><span class="size-chip">S</span><span class="size-chip">M</span><span class="size-chip">L</span><span class="size-chip">XL</span><span class="size-chip">XXL</span></div>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20T-shirt%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-hoodie g-dark">
+            <div class="glogo"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+            <div class="gqr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=0&data=https://ldoufotracker.com" alt="Code QR LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Chandail à capuche LDO</h3>
+          <p class="desc">Molleton doublé, poche kangourou. Logo pleine grandeur à l'avant.</p>
+          <div class="swatches">
+            <span class="swatch" style="background:#f3eeff" title="Blanc"></span>
+            <span class="swatch" style="background:#0c0810" title="Noir"></span>
+            <span class="swatch" style="background:#C9AEE8" title="Violet pâle"></span>
+            <span class="swatch" style="background:#7C4FB0" title="Violet médium"></span>
+            <span class="swatch" style="background:#3B0A5E" title="Violet foncé"></span>
+          </div>
+          <div class="sizes"><span class="size-chip">S</span><span class="size-chip">M</span><span class="size-chip">L</span><span class="size-chip">XL</span><span class="size-chip">XXL</span></div>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20Capuche%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-crew g-medium">
+            <div class="glogo"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+            <div class="gqr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=0&data=https://ldoufotracker.com" alt="Code QR LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Chandail coton ouaté LDO</h3>
+          <p class="desc">Col rond, molleton épais. Logo pleine grandeur à l'avant.</p>
+          <div class="swatches">
+            <span class="swatch" style="background:#f3eeff" title="Blanc"></span>
+            <span class="swatch" style="background:#0c0810" title="Noir"></span>
+            <span class="swatch" style="background:#C9AEE8" title="Violet pâle"></span>
+            <span class="swatch" style="background:#7C4FB0" title="Violet médium"></span>
+            <span class="swatch" style="background:#3B0A5E" title="Violet foncé"></span>
+          </div>
+          <div class="sizes"><span class="size-chip">S</span><span class="size-chip">M</span><span class="size-chip">L</span><span class="size-chip">XL</span><span class="size-chip">XXL</span></div>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20Coton%20ouat%C3%A9%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-cap g-pale">
+            <div class="glogo" style="transform:translate(-50%,-50%); width:44%;"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Casquette LDO</h3>
+          <p class="desc">Ajustable, logo brodé à l'avant.</p>
+          <div class="swatches">
+            <span class="swatch" style="background:#f3eeff" title="Blanc"></span>
+            <span class="swatch" style="background:#0c0810" title="Noir"></span>
+            <span class="swatch" style="background:#C9AEE8" title="Violet pâle"></span>
+            <span class="swatch" style="background:#7C4FB0" title="Violet médium"></span>
+            <span class="swatch" style="background:#3B0A5E" title="Violet foncé"></span>
+          </div>
+          <div class="sizes"><span class="size-chip">Taille unique ajustable</span></div>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20Casquette%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modeles">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Modèles de design</div>
+      <h2>Deux traitements du logo, selon la couleur du vêtement</h2>
+      <p>Même mise en page sur tous les vêtements — grand logo centré à l'avant, code QR en bas à gauche — mais deux versions du logo pour bien ressortir sur clair ou sur foncé.</p>
+    </div>
+    <div class="types">
+      <div class="type-card reveal">
+        <div class="mockup" style="border-radius:12px;">
+          <div class="garment garment-tee g-white" style="width:78%;height:78%;">
+            <div class="glogo"><img src="assets/ldo-logo.png" alt="Logo LDO pleine couleur"></div>
+            <div class="gqr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=0&data=https://ldoufotracker.com" alt="Code QR LDO"></div>
+          </div>
+        </div>
+        <div>
+          <h4>TYPE 1 — PLEINE COULEUR</h4>
+          <p>Le badge LDO complet (violet, vert fluo, blanc) — pour les vêtements clairs : blanc et violet pâle. Contraste maximal, couleurs de marque intactes.</p>
+        </div>
+      </div>
+      <div class="type-card reveal">
+        <div class="mockup" style="border-radius:12px;">
+          <div class="garment garment-tee g-black" style="width:78%;height:78%;">
+            <div class="glogo"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+            <div class="gqr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=0&data=https://ldoufotracker.com" alt="Code QR LDO"></div>
+          </div>
+        </div>
+        <div>
+          <h4>TYPE 2 — SUR FOND FONCÉ</h4>
+          <p>Même badge LDO, sur les vêtements foncés : noir, violet médium et violet foncé. Le contour vert fluo et le fond violet du badge ressortent naturellement sur ces teintes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="autres">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Autres produits</div>
+      <h2>Affiches et tasse</h2>
+      <p>Le badge LDO en grand format, ou avec vous chaque matin.</p>
+    </div>
+    <div class="pgrid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-poster g-white" style="display:flex;align-items:center;justify-content:center;">
+            <div class="glogo" style="position:static; transform:none; width:56%;"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Affiche LDO</h3>
+          <p class="desc">Formats : 20×25cm, 30×40cm, A3, A2.</p>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20Affiche%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+      <div class="pcard reveal">
+        <div class="mockup">
+          <span class="badge-soon">Bientôt</span>
+          <div class="garment garment-mug g-white" style="display:flex;align-items:center;justify-content:center;">
+            <div class="glogo" style="position:static; transform:none; width:60%;"><img src="assets/ldo-logo.png" alt="Logo LDO"></div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Tasse LDO</h3>
+          <p class="desc">Céramique, 325ml (11oz), badge LDO imprimé.</p>
+          <a class="notify" href="mailto:j_david@live.ca?subject=Avise-moi%20%E2%80%94%20Tasse%20LDO">M'aviser à la mise en vente →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fournisseur">
+  <div class="wrap">
+    <div class="model-note reveal">
+      <div class="eyebrow">// Transparence</div>
+      <h2 style="font-size:22px;">Comment la boutique fonctionnera</h2>
+      <p>La boutique LDO sera propulsée par un modèle d'impression à la demande (Printful) branché à une boutique en ligne — aucun stock détenu par LDO, aucun article fabriqué avant qu'une commande soit passée. Le fournisseur imprime, assemble et expédie chaque article directement au client.</p>
+      <p>Les paiements seront traités par un processeur de paiement en ligne standard. Comme pour l'application, la boutique ne conserve aucune information de carte de paiement sur ses propres serveurs.</p>
+      <div class="tag-row">
+        <span class="tag">Impression à la demande</span>
+        <span class="tag">Aucun stock géré par LDO</span>
+        <span class="tag">Expédition directe par le fournisseur</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="index-1.html" style="font-size:14px;"><span class="brand-mark" style="width:22px;height:22px;font-size:8px;">L</span> LDO — Détecteur d'OVNI</a>
+    <div class="footlinks">
+      <a href="index-1.html">Accueil</a>
+      <a href="mailto:j_david@live.ca?subject=Boutique%20LDO">Nous joindre</a>
+      <a href="index-1.html#tutoriel">Tutoriel</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ⚠️ À COMPLÉTER : remplacez ce domaine par l'URL réelle du site (ou le lien App Store direct)
+  // une fois disponible — les codes QR ci-dessus doivent pointer vers votre vraie adresse.
+  const SITE_URL = "https://ldoufotracker.com";
+  document.querySelectorAll('img[src*="api.qrserver.com"]').forEach(img => {
+    img.src = img.src.replace(/data=[^&]+/, "data=" + encodeURIComponent(SITE_URL));
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
