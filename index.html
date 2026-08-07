@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr-CA">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LDO — Détecteur d'OVNI</title>
+<title>LDO — UFO Detector / Détecteur d'OVNI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -290,6 +290,8 @@
 </style>
 </head>
 <body>
+<div id="lang-en" style="background:var(--void); color:var(--paper);">
+
 
 <div id="stars"></div>
 
@@ -297,15 +299,264 @@
   <div class="wrap">
     <div class="brand"><span class="brand-mark">L</span> LDO</div>
     <div class="navlinks">
-      <a href="#comment">Comment ça marche</a>
-      <a href="#analyse">L'analyse</a>
-      <a href="#tutoriel">Tutoriel</a>
-      <a href="boutique.html">Boutique</a>
-      <a href="#honnetete">Notre approche</a>
-      <a href="#" class="support-link">Assistance</a>
-      <a href="#obtenir">Télécharger</a>
+      <a href="#comment-en">How it works</a>
+      <a href="#analyse-en">The analysis</a>
+      <a href="#tutoriel-en">Tutorial</a>
+      <a href="#honnetete-en">Our approach</a>
+      <a href="#" class="support-link">Support</a>
+      <a href="#obtenir-en">Download</a>
     </div>
-    <a href="#obtenir" class="btn btn-primary store-link" style="padding:10px 18px;">0,99 $ CA</a>
+    <a href="javascript:void(0)" onclick="ldoSwitchLang('fr')" class="btn btn-ghost lang-toggle" style="padding:10px 14px; margin-right:8px;">🌐 FR</a>
+    <a href="#obtenir-en" class="btn btn-primary store-link" style="padding:10px 18px;">$0.99 CAD</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">// iOS App · Vision + ARKit</div>
+      <h1>You just saw<br>something. <span>LDO analyzes it.</span></h1>
+      <p class="lede">Film the object and LDO combines your iPhone's camera and ARKit motion tracking to calculate its trajectory, speed, G-forces, illumination and position — then tells you, with the numbers to back it up, what it probably is.</p>
+      <div class="hero-ctas">
+        <a href="#obtenir-en" class="btn btn-primary store-link">Get LDO — $0.99 CAD</a>
+        <a href="#comment-en" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-note">Works with any recent iPhone — no LiDAR required</div>
+    </div>
+
+    <div class="hud reveal">
+      <div class="hud-top"><span><span class="hud-dot"></span>ANALYSIS IN PROGRESS · NIGHT MODE</span><span>00:04.2</span></div>
+      <div class="radar"><div class="reticle"></div><div class="target"></div></div>
+      <div class="readout">
+        <div class="row"><span>Shape</span><b>Unidentified (18%)</b></div>
+        <div class="row"><span>Trajectory</span><b>Zigzag · R² 0.41</b></div>
+        <div class="row"><span>Max speed</span><b>≈ 4,100 km/h</b></div>
+        <div class="row"><span>Illumination</span><b>Flickering</b></div>
+        <div class="row"><span>Verdict</span><b class="verdict">67% possible UFO<span class="caret"></span></b></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="process" id="comment-en">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// The process</div>
+      <h2>One video. Nine calculations. One answer.</h2>
+      <p>Every sighting runs through the same analysis chain, from choosing a mode to the final verdict.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">01</div><div><h3>Choose Night or Day</h3><p>A dark sky with a point of light, or a clear sky with a backlit silhouette? LDO doesn't run the same detection in both cases — you tell it which one before filming.</p></div></div>
+      <div class="step reveal"><div class="num">02</div><div><h3>Film with one tap</h3><p>A single button starts full-resolution HD recording — no settings to fiddle with while the object is still in the sky.</p></div></div>
+      <div class="step reveal"><div class="num">03</div><div><h3>Pick the best 2 seconds</h3><p>Afterwards, select the 2-second clip to analyze — the full video stays untouched so you can watch it back in full.</p></div></div>
+      <div class="step reveal"><div class="num">04</div><div><h3>LDO isolates and tracks the object</h3><p>Night mode: a brightness threshold that adapts frame by frame to isolate the brightest point in the sky. Day mode: detects the darkest silhouette against the sky. Continuous tracking tells the real object apart from noise or hand shake.</p></div></div>
+      <div class="step reveal"><div class="num">05</div><div><h3>Trajectory corrected for camera motion</h3><p>On-screen position is converted into a real direction in the sky using the phone's pose (ARKit), so LDO calculates an actual flight path — not just a pixel shift.</p></div></div>
+      <div class="step reveal"><div class="num">06</div><div><h3>A verdict, with its reasons</h3><p>LDO shows a percentage — always capped at 90%, never absolute certainty — and, just as importantly, the list of factors behind it, so you can judge for yourself.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="analyse-en">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Under the hood</div>
+      <h2>Seven measurements, one recording</h2>
+      <p>Every video you capture feeds all the analyses below at the same time.</p>
+    </div>
+    <div class="fgrid">
+      <div class="fcard"><div class="tag">TRAJECTORY</div><h3>Straight line, a curve... or a zigzag?</h3><p>Detects direction changes, estimates the G-forces involved compared against human tolerance, and flags left-right zigzag paths that no known aircraft performs.</p></div>
+      <div class="fcard"><div class="tag">SPEED</div><h3>Measured against the fastest known aircraft</h3><p>Average and maximum speed; a speed 2 to 3 times faster than an F-35 (~1,960 km/h) is flagged as beyond the reach of known aviation.</p></div>
+      <div class="fcard"><div class="tag">ILLUMINATION</div><h3>Flickering, or steady?</h3><p>A variable flicker is atypical of a known light source; a steady, continuous light points more toward a spotlight or navigation light.</p></div>
+      <div class="fcard"><div class="tag">SOUND</div><h3>Listens to the audio track</h3><p>Recognizes the sound signatures of aircraft, helicopters, birds, and insects.</p></div>
+      <div class="fcard"><div class="tag">DISTANCE</div><h3>Angular triangulation</h3><p>No LiDAR (its range is too short for a distant aerial object): distance and altitude are estimated by triangulation, always with a visible confidence score.</p></div>
+      <div class="fcard"><div class="tag">POSITION</div><h3>Map and GPS coordinates</h3><p>Your iPhone's position at the moment of capture is shown on a map, with latitude and longitude, to pin down where the sighting happened.</p></div>
+      <div class="fcard"><div class="tag">ARCHIVE</div><h3>Video and 3 photos</h3><p>A wide shot, an automatic maximum zoom enhanced to show the target clearly, and a fixed ×2 zoom — saved with the video to your device and iCloud.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="tutorial" id="tutoriel-en">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">// Tutorial</div>
+      <h2>How LDO works, in detail</h2>
+      <p>The full user guide and the math behind every number shown on screen.</p>
+    </div>
+    <div class="tutorial-grid">
+      <div>
+        <h3 class="sub">USING THE APP</h3>
+        <div class="usage">
+          <div class="step reveal">
+            <div class="num">1</div>
+            <div>
+              <h4>Pick a mode</h4>
+              <p>On the capture screen, choose Night or Day depending on the scene.</p>
+              <div class="mode-pair">
+                <div class="mode-pill"><b>NIGHT</b>A point of light against a dark sky.</div>
+                <div class="mode-pill"><b>DAY</b>A dark silhouette against a bright sky.</div>
+              </div>
+            </div>
+          </div>
+          <div class="step reveal"><div class="num">2</div><div><h4>Film</h4><p>One button starts HD recording. The full video is automatically saved to Photos and to "My Recordings" — no analysis starts yet.</p></div></div>
+          <div class="step reveal"><div class="num">3</div><div><h4>Pick a video to analyze</h4><p>From "My Recordings" (a LIVE capture, with camera pose data) or from the Library tab (imported from Photos).</p></div></div>
+          <div class="step reveal"><div class="num">4</div><div><h4>Trim to 2 seconds</h4><p>Move the trim window to the sharpest moment — only that clip is sampled for analysis.</p></div></div>
+          <div class="step reveal"><div class="num">5</div><div><h4>Let it calculate</h4><p>An animated radar and a real progress bar (by completed step, not a guess) accompany the nine calculations, entirely on your device.</p></div></div>
+          <div class="step reveal"><div class="num">6</div><div><h4>Review the results</h4><p>3 cropped photos, a map of the capture location, every measurement, and the verdict with its factors. "New capture" resets the app for the next sighting.</p></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="sub">THE MATH, EXPLAINED</h3>
+        <div class="fgrid" style="grid-template-columns:1fr;">
+          <div class="fcard">
+            <div class="tag">DETECTION</div>
+            <h3>Isolating the object in frame</h3>
+            <p>Night: a brightness threshold recalculated on every frame, halfway between the background sky and the brightest point — catches a point that's only moderately bright, not just blinding sources. Day: the same idea inverted, on the darkest silhouette in the sky.</p>
+            <span class="formula">threshold = average + 0.5 × (max − average)</span>
+          </div>
+          <div class="fcard">
+            <div class="tag">TRAJECTORY</div>
+            <h3>Real direction, not pixels</h3>
+            <p>Every on-screen position is converted into a real 3D direction in the sky using the camera's pose (ARKit) at the exact moment of detection — a movement of your arm doesn't count as a movement of the object.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">DISTANCE & ALTITUDE</div>
+            <h3>Angular triangulation</h3>
+            <p>Based on a plausible real-world size for the detected shape and the angle it occupies in frame. Always shown with a confidence score — never presented as a certain measurement.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">SPEED & G-FORCES</div>
+            <h3>Distance × angular velocity</h3>
+            <p>Without a reliable distance, LDO shows "not calculable" rather than a made-up number. Maximum speed is compared against known aircraft, up to an F-35 (~1,960 km/h).</p>
+            <span class="formula">v (km/h) = distance (m) × angular velocity (rad/s) × 3.6</span>
+          </div>
+          <div class="fcard">
+            <div class="tag">ILLUMINATION</div>
+            <h3>Color and steadiness</h3>
+            <p>Color temperature approximated from the average hue of the light source (bluish-white ≈ LED, orange ≈ sun reflection), plus detection of a variable flicker versus a steady output.</p>
+          </div>
+          <div class="fcard">
+            <div class="tag">VERDICT</div>
+            <h3>A sum of transparent factors</h3>
+            <p>Unidentified shape, out-of-norm G-forces or acceleration, an irregular or zigzag trajectory, extreme speed, flickering, no identified sound: every factor that applies is listed on screen. The final percentage is always capped at 90% — never certainty.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="honnetete-en">
+  <div class="wrap">
+    <div class="honesty reveal">
+      <div>
+        <div class="eyebrow">// Our approach</div>
+        <h2>LDO never makes up a number</h2>
+        <p>Nobody can measure the distance of a far-away aerial object with certainty without dedicated instruments — so LDO doesn't pretend otherwise: every distance is an estimate from angular triangulation, never a direct measurement.</p>
+      </div>
+      <ul>
+        <li>Without a reliable distance, speed and G-forces show as "not calculable" — never a made-up figure.</li>
+        <li>Every estimate ships with its own confidence score, visible right in the app.</li>
+        <li>The final verdict is always capped at 90% possibility — never 100%, even for an obvious sighting: LDO stays an interpretation aid, not a scientific certification.</li>
+        <li>No video or photo ever leaves your device to our servers — the analysis runs entirely on the iPhone.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="obtenir-en">
+  <div class="wrap">
+    <div class="price-tag"><b>$0.99</b> CAD · App Store</div>
+    <h2>The next light in the sky deserves a real analysis.</h2>
+    <p>Download LDO and keep an (assisted) eye on the sky.</p>
+    <a class="store-badge store-link" href="#">
+      <svg viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141 8 184.8 8 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 37.5 59 129.3 107.2 127.8 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-84.1 102.6-121.7-65.2-30.7-65.7-90-65.7-92.1zM251.1 88.7c26.9-32 24.5-61.2 23.7-71.7-23.8 1.4-51.4 16.4-67.1 34.9-17.3 19.8-27.5 44.3-25.3 70.5 25.2 2 48.2-10.6 68.7-33.7z"/></svg>
+      <span class="lines"><small>Download on the</small><strong>App Store</strong></span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:14px;"><span class="brand-mark" style="width:22px;height:22px;font-size:8px;">L</span> LDO — UFO Detector</div>
+    <div class="footlinks">
+      <a href="#" class="privacy-link">Privacy Policy</a>
+      <a href="#" class="support-link">Support</a>
+      <a href="#tutoriel-en">Tutorial</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ⚠️ TO DO: paste your App Store listing URL here once it exists
+  // (typical format: https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
+  const APP_STORE_URL = ""; // e.g. "https://apps.apple.com/ca/app/ldo/id0000000000"
+
+  // ⚠️ TO DO: paste your Carrd support page URL here once published
+  const SUPPORT_URL = ""; // e.g. "https://ldo.carrd.co"
+
+  // ⚠️ TO DO: paste your privacy policy URL here once hosted
+  const PRIVACY_URL = "confidentialite.html"; // e.g. "https://ldo.carrd.co/#privacy"
+
+  document.querySelectorAll('.store-link').forEach(link => {
+    if (APP_STORE_URL) {
+      link.href = APP_STORE_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    }
+    // Until the URL is filled in, buttons point to the #obtenir section
+    // (current behavior) so there is never a dead link.
+  });
+
+  document.querySelectorAll('.support-link').forEach(link => {
+    if (SUPPORT_URL) {
+      link.href = SUPPORT_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    } else {
+      // Until the support page is hosted, the button opens an email instead
+      // of showing a dead link.
+      link.href = "mailto:ldoufotracker@outlook.com?subject=LDO%20Support";
+    }
+  });
+
+  document.querySelectorAll('.privacy-link').forEach(link => {
+    if (PRIVACY_URL) {
+      link.href = PRIVACY_URL;
+      link.target = "_blank";
+      link.rel = "noopener";
+    } else {
+      link.href = "mailto:ldoufotracker@outlook.com?subject=LDO%20Privacy%20Policy";
+    }
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+
+</div>
+<div id="lang-fr" style="display:none; background:var(--void); color:var(--paper);">
+
+
+<div id="stars"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="brand-mark">L</span> LDO</div>
+    <div class="navlinks">
+      <a href="#comment-fr">Comment ça marche</a>
+      <a href="#analyse-fr">L'analyse</a>
+      <a href="#tutoriel-fr">Tutoriel</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="#honnetete-fr">Notre approche</a>
+      <a href="#" class="support-link">Assistance</a>
+      <a href="#obtenir-fr">Télécharger</a>
+    </div>
+    <a href="javascript:void(0)" onclick="ldoSwitchLang('en')" class="btn btn-ghost lang-toggle" style="padding:10px 14px; margin-right:8px;">🌐 EN</a>
+    <a href="#obtenir-fr" class="btn btn-primary store-link" style="padding:10px 18px;">0,99 $ CA</a>
   </div>
 </nav>
 
@@ -316,8 +567,8 @@
       <h1>Vous venez de voir<br>quelque chose. <span>LDO analyse.</span></h1>
       <p class="lede">Filmez l'objet, LDO combine la caméra et le suivi de mouvement ARKit de votre iPhone pour calculer sa trajectoire, sa vitesse, ses forces G, son illumination et sa position — puis vous dit, chiffres à l'appui, ce qu'il est probablement.</p>
       <div class="hero-ctas">
-        <a href="#obtenir" class="btn btn-primary store-link">Obtenir LDO — 0,99 $ CA</a>
-        <a href="#comment" class="btn btn-ghost">Voir comment ça marche</a>
+        <a href="#obtenir-fr" class="btn btn-primary store-link">Obtenir LDO — 0,99 $ CA</a>
+        <a href="#comment-fr" class="btn btn-ghost">Voir comment ça marche</a>
       </div>
       <div class="hero-note">Compatible avec tout iPhone récent — aucun LiDAR requis</div>
     </div>
@@ -336,7 +587,7 @@
   </div>
 </header>
 
-<section class="process" id="comment">
+<section class="process" id="comment-fr">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">// Le processus</div>
@@ -354,7 +605,7 @@
   </div>
 </section>
 
-<section class="features" id="analyse">
+<section class="features" id="analyse-fr">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">// Sous le capot</div>
@@ -373,7 +624,7 @@
   </div>
 </section>
 
-<section class="tutorial" id="tutoriel">
+<section class="tutorial" id="tutoriel-fr">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">// Tutoriel</div>
@@ -444,7 +695,7 @@
   </div>
 </section>
 
-<section id="honnetete">
+<section id="honnetete-fr">
   <div class="wrap">
     <div class="honesty reveal">
       <div>
@@ -462,7 +713,7 @@
   </div>
 </section>
 
-<section class="cta" id="obtenir">
+<section class="cta" id="obtenir-fr">
   <div class="wrap">
     <div class="price-tag"><b>0,99 $</b> CA · App Store</div>
     <h2>Le prochain point lumineux mérite une vraie analyse.</h2>
@@ -480,7 +731,7 @@
     <div class="footlinks">
       <a href="#" class="privacy-link">Politique de confidentialité</a>
       <a href="#" class="support-link">Assistance</a>
-      <a href="#tutoriel">Tutoriel</a>
+      <a href="#tutoriel-fr">Tutoriel</a>
       <a href="boutique.html">Boutique</a>
     </div>
   </div>
@@ -515,7 +766,7 @@
     } else {
       // Tant que la page d'assistance n'est pas hébergée, le bouton ouvre
       // directement un courriel — jamais de lien mort.
-      link.href = "mailto:j_david@live.ca?subject=Assistance%20LDO";
+      link.href = "mailto:ldoufotracker@outlook.com?subject=Assistance%20LDO";
     }
   });
 
@@ -525,7 +776,7 @@
       link.target = "_blank";
       link.rel = "noopener";
     } else {
-      link.href = "mailto:j_david@live.ca?subject=Politique%20de%20confidentialit%C3%A9%20LDO";
+      link.href = "mailto:ldoufotracker@outlook.com?subject=Politique%20de%20confidentialit%C3%A9%20LDO";
     }
   });
 
@@ -535,7 +786,20 @@
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 
+
+</div>
+
+<script>
+function ldoSwitchLang(lang){
+  document.getElementById('lang-en').style.display = (lang === 'en') ? '' : 'none';
+  document.getElementById('lang-fr').style.display = (lang === 'fr') ? '' : 'none';
+  try { localStorage.setItem('ldoLang', lang); } catch(e){}
+}
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('ldoLang'); } catch(e){}
+  if(saved === 'fr'){ ldoSwitchLang('fr'); }
+})();
+</script>
 </body>
 </html>
-<!-- deploy trigger 1786047953 -->
-<!-- retry 1786054318 -->
