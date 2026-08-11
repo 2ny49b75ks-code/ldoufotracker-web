@@ -488,6 +488,7 @@
 </footer>
 
 <script>
+(function(){ // portée isolée — évite un conflit avec le bloc <script> du second bloc de langue (voir plus bas)
   // ⚠️ TO DO: paste your App Store listing URL here once it exists
   // (typical format: https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
   const APP_STORE_URL = ""; // e.g. "https://apps.apple.com/ca/app/ldo/id0000000000"
@@ -534,6 +535,7 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
 </script>
 
 
@@ -738,6 +740,7 @@
 </footer>
 
 <script>
+(function(){ // portée isolée — évite un conflit avec le bloc <script> du premier bloc de langue (voir plus haut)
   // ⚠️ À COMPLÉTER : collez ici l'URL de votre fiche App Store dès qu'elle existe
   // (format habituel : https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
   const APP_STORE_URL = ""; // ex: "https://apps.apple.com/ca/app/ldo/id0000000000"
@@ -784,6 +787,7 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
 </script>
 
 
