@@ -798,7 +798,16 @@ function ldoSwitchLang(lang){
 (function(){
   var saved = null;
   try { saved = localStorage.getItem('ldoLang'); } catch(e){}
-  if(saved === 'fr'){ ldoSwitchLang('fr'); }
+  var hash = location.hash || "";
+  // Un lien qui arrive avec une ancre en -fr (ex. depuis boutique.html, entièrement en français)
+  // doit forcer l'affichage français avant de défiler — sinon la section visée reste cachée
+  // (display:none) et le navigateur ne peut pas y faire défiler la page, ce qui donnait
+  // l'impression d'une page vide/coupée en plein milieu.
+  if(saved === 'fr' || hash.indexOf('-fr') !== -1){ ldoSwitchLang('fr'); }
+  if(hash.length > 1){
+    var target = document.getElementById(hash.substring(1));
+    if(target){ target.scrollIntoView(); }
+  }
 })();
 </script>
 </body>
