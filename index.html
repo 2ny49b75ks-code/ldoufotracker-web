@@ -806,7 +806,15 @@ function ldoSwitchLang(lang){
   if(saved === 'fr' || hash.indexOf('-fr') !== -1){ ldoSwitchLang('fr'); }
   if(hash.length > 1){
     var target = document.getElementById(hash.substring(1));
-    if(target){ target.scrollIntoView(); }
+    if(target){
+      // Un saut direct vers une ancre (pas un défilement naturel depuis le haut de la page) ne
+      // déclenche pas toujours l'IntersectionObserver qui rend visibles les éléments .reveal
+      // (opacity:0 par défaut sinon) — corrige le bug signalé par Jean-David (2026-08-11) : le
+      // titre de section s'affichait mais tout le contenu en dessous (étapes numérotées) restait
+      // invisible après un lien direct depuis boutique.html.
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+      target.scrollIntoView();
+    }
   }
 })();
 </script>
