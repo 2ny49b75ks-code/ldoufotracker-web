@@ -489,17 +489,18 @@
 
 <script>
 (function(){ // portée isolée — évite un conflit avec le bloc <script> du second bloc de langue (voir plus bas)
-  // ⚠️ TO DO: paste your App Store listing URL here once it exists
-  // (typical format: https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
+  // Scope explicite au bloc EN uniquement : document.querySelectorAll('.store-link') sans portée
+  // sélectionnait TOUS les boutons de la page (EN + FR), donc le script FR (qui s'exécute après)
+  // écrasait systématiquement les liens EN avec l'URL App Store en fr-CA — bug resté invisible tant
+  // qu'APP_STORE_URL était vide (la condition `if (APP_STORE_URL)` ne faisait jamais rien), révélé
+  // dès que la vraie URL App Store a été renseignée (app en vente, 2026-09-11).
+  const root = document.getElementById('lang-en');
+
   const APP_STORE_URL = "https://apps.apple.com/ca/app/ldo-ufo-tracker/id6796142516";
+  const SUPPORT_URL = "support.html";
+  const PRIVACY_URL = "privacy.html"; // page anglaise dédiée (distincte de confidentialite.html, voir bloc FR)
 
-  // ⚠️ TO DO: paste your Carrd support page URL here once published
-  const SUPPORT_URL = "support.html"; // e.g. "https://ldo.carrd.co"
-
-  // ⚠️ TO DO: paste your privacy policy URL here once hosted
-  const PRIVACY_URL = "confidentialite.html"; // e.g. "https://ldo.carrd.co/#privacy"
-
-  document.querySelectorAll('.store-link').forEach(link => {
+  root.querySelectorAll('.store-link').forEach(link => {
     if (APP_STORE_URL) {
       link.href = APP_STORE_URL;
       link.target = "_blank";
@@ -509,7 +510,7 @@
     // (current behavior) so there is never a dead link.
   });
 
-  document.querySelectorAll('.support-link').forEach(link => {
+  root.querySelectorAll('.support-link').forEach(link => {
     if (SUPPORT_URL) {
       link.href = SUPPORT_URL;
       link.target = "_blank";
@@ -521,7 +522,7 @@
     }
   });
 
-  document.querySelectorAll('.privacy-link').forEach(link => {
+  root.querySelectorAll('.privacy-link').forEach(link => {
     if (PRIVACY_URL) {
       link.href = PRIVACY_URL;
       link.target = "_blank";
@@ -534,7 +535,7 @@
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  root.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
 </script>
 
@@ -741,17 +742,15 @@
 
 <script>
 (function(){ // portée isolée — évite un conflit avec le bloc <script> du premier bloc de langue (voir plus haut)
-  // ⚠️ À COMPLÉTER : collez ici l'URL de votre fiche App Store dès qu'elle existe
-  // (format habituel : https://apps.apple.com/ca/app/ldo/idXXXXXXXXXX)
+  // Scope explicite au bloc FR uniquement — voir le commentaire équivalent dans le bloc EN
+  // ci-dessus pour le bug corrigé (querySelectorAll sans portée écrasait les liens EN aussi).
+  const root = document.getElementById('lang-fr');
+
   const APP_STORE_URL = "https://apps.apple.com/ca/app/ldo-ufo-tracker/id6796142516?l=fr-CA";
+  const SUPPORT_URL = "support.html";
+  const PRIVACY_URL = "confidentialite.html";
 
-  // ⚠️ À COMPLÉTER : collez ici l'URL de votre page d'assistance Carrd une fois publiée
-  const SUPPORT_URL = "support.html"; // ex: "https://ldo.carrd.co"
-
-  // ⚠️ À COMPLÉTER : collez ici l'URL de votre politique de confidentialité une fois hébergée
-  const PRIVACY_URL = "confidentialite.html"; // ex: "https://ldo.carrd.co/#confidentialite"
-
-  document.querySelectorAll('.store-link').forEach(link => {
+  root.querySelectorAll('.store-link').forEach(link => {
     if (APP_STORE_URL) {
       link.href = APP_STORE_URL;
       link.target = "_blank";
@@ -761,7 +760,7 @@
     // #obtenir (comportement actuel), pour ne jamais afficher de lien mort.
   });
 
-  document.querySelectorAll('.support-link').forEach(link => {
+  root.querySelectorAll('.support-link').forEach(link => {
     if (SUPPORT_URL) {
       link.href = SUPPORT_URL;
       link.target = "_blank";
@@ -773,7 +772,7 @@
     }
   });
 
-  document.querySelectorAll('.privacy-link').forEach(link => {
+  root.querySelectorAll('.privacy-link').forEach(link => {
     if (PRIVACY_URL) {
       link.href = PRIVACY_URL;
       link.target = "_blank";
@@ -786,7 +785,7 @@
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  root.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
 </script>
 
